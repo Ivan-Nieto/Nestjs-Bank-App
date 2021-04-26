@@ -12,6 +12,7 @@ export const TRANSACTIONS = [
     id: '1002',
     account_id: '0004',
     type: 'withdraw',
+    target_account_id: '0002',
     amount_money: {
       amount: 7.99,
       currency: 'USD',

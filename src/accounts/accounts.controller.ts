@@ -16,8 +16,28 @@ export class AccountsController {
     return this.accountService.getAccount(id);
   }
 
+  @Get(':id/transactions')
+  public getTransactions(@Param('id') id: string) {
+    return this.accountService.getAccountTransactions(id);
+  }
+
   @Post()
   public addAccount(@Body() acc: AccountDto) {
     return this.accountService.createAccount(acc);
+  }
+
+  @Post(':id/transactions/add')
+  public addFunds(@Param('id') id: string, @Body() trz: any) {
+    return this.accountService.deposit(id, trz);
+  }
+
+  @Post(':id/transactions/withdraw')
+  public withdrawFunds(@Param('id') id: string, @Body() trz: any) {
+    return this.accountService.withdraw(id, trz);
+  }
+
+  @Post(':id/transactions/send')
+  public sendFunds(@Param('id') id: string, @Body() trz: any) {
+    return this.accountService.send(id, trz);
   }
 }
