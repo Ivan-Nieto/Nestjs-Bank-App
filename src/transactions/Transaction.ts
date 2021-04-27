@@ -19,7 +19,7 @@ export class Transaction {
   private _note: string;
   private _target_account_id: string;
 
-  constructor(trz?: TransactionsDto) {
+  constructor(trz?: Partial<TransactionsDto>) {
     if (!trz) return;
 
     this._id = trz.id;
@@ -122,5 +122,11 @@ export class Transaction {
         ? { target_account_id: this._target_account_id }
         : {}),
     };
+  }
+
+  save(): { error: boolean } {
+    if (!this.valid) return { error: true };
+    this.transactions.push(this.toObject());
+    return { error: true };
   }
 }

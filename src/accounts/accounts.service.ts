@@ -53,7 +53,8 @@ export class AccountsService {
     // Make sure id is unique
     if (!Acc.unique) throw new HttpException('Id already exists', 403);
 
-    this.accounts.push(Acc.toObject());
+    const { error } = Acc.save();
+    if (error) throw new HttpException('Failed to save account', 500);
     return 'Done';
   }
 
@@ -73,7 +74,6 @@ export class AccountsService {
   public deposit(account_id: string, transaction: TransactionsDto) {
     // Data validation
     const trans = new Transaction({ ...transaction, account_id });
-
     const { valid, invalidFields, missingFields } = trans.valid();
 
     if (missingFields?.length || invalidFields?.length) {
@@ -179,7 +179,7 @@ export class AccountsService {
     };
 
     // Add transaction
-    this.transactions.push(trans.toObject());
+    trans.save();
 
     return 'Done';
   }
@@ -268,7 +268,7 @@ export class AccountsService {
     };
 
     // Add transaction record
-    this.transactions.push(trans.toObject());
+    trans.save();
 
     return 'Done';
   }

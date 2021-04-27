@@ -3,11 +3,11 @@ import { AccountDto } from './account.dto';
 import { ACCOUNTS } from './accounts';
 
 export class Account {
-  private _accounts = ACCOUNTS;
+  private accounts: AccountDto[] = ACCOUNTS;
 
-  _initialized = false;
-  _isValid = false;
-  _unique = false;
+  private _initialized = false;
+  private _isValid = false;
+  private _unique = false;
 
   private _id: string;
   private _given_name: string;
@@ -19,7 +19,7 @@ export class Account {
     currency: string;
   };
 
-  constructor(acc?: AccountDto) {
+  constructor(acc?: Partial<AccountDto>) {
     if (!acc) return;
 
     // Data validation
@@ -133,12 +133,12 @@ export class Account {
 
   public isUnique(id: string) {
     if (invalidString(id)) return false;
-    return this._accounts.every((e) => e.id !== id);
+    return this.accounts.every((e) => e.id !== id);
   }
 
   public exists(id: string) {
     if (invalidString(id)) return false;
-    return this._accounts.some((e) => e.id === id);
+    return this.accounts.some((e) => e.id === id);
   }
 
   public toObject(): AccountDto {
@@ -150,5 +150,11 @@ export class Account {
       balance: this._balance,
       note: this._note,
     };
+  }
+
+  save(): { error: boolean } {
+    if (!this.valid) return { error: true };
+    this.accounts.push(this.toObject());
+    return { error: true };
   }
 }
