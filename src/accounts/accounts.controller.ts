@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { AccountDto } from './account.dto';
+import { TransactionsDto } from '../transactions/transactions.dto';
 
 @Controller('accounts')
 export class AccountsController {
@@ -27,17 +28,17 @@ export class AccountsController {
   }
 
   @Post(':id/transactions/add')
-  public addFunds(@Param('id') id: string, @Body() trz: any) {
+  public addFunds(@Param('id') id: string, @Body() trz: TransactionsDto) {
     return this.accountService.deposit(id, trz);
   }
 
   @Post(':id/transactions/withdraw')
-  public withdrawFunds(@Param('id') id: string, @Body() trz: any) {
+  public withdrawFunds(@Param('id') id: string, @Body() trz: TransactionsDto) {
     return this.accountService.withdraw(id, trz);
   }
 
   @Post(':id/transactions/send')
-  public sendFunds(@Param('id') id: string, @Body() trz: any) {
+  public sendFunds(@Param('id') id: string, @Body() trz: TransactionsDto) {
     return this.accountService.send(id, trz);
   }
 }
