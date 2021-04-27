@@ -9,9 +9,9 @@ import {
 export class Transaction {
   private transactions: TransactionsDto[] = TRANSACTIONS;
 
-  _initialized = false;
-  _valid = false;
-  _unique = false;
+  private _initialized = false;
+  private _isValid = false;
+  private _unique = false;
 
   private _id: string;
   private _amount_money: { amount: number; currency: string };
@@ -28,9 +28,41 @@ export class Transaction {
     this._note = trz.note;
     this._target_account_id = trz.target_account_id;
 
-    this._valid = this.valid().valid;
+    this._isValid = this.valid().valid;
     this._unique = this.isUnique(this._id);
     this._initialized = true;
+  }
+
+  get initialized(): boolean {
+    return this._initialized;
+  }
+
+  get isValid(): boolean {
+    return this._isValid;
+  }
+
+  get unique(): boolean {
+    return this._unique;
+  }
+
+  get id(): string | undefined {
+    return this._id;
+  }
+
+  get amount_money(): { amount: number; currency: string } | undefined {
+    return this._amount_money;
+  }
+
+  get account_id(): string | undefined {
+    return this._account_id;
+  }
+
+  get note(): string | undefined {
+    return this._note;
+  }
+
+  get target_account_id(): string | undefined {
+    return this._target_account_id;
   }
 
   valid(): {
@@ -56,7 +88,7 @@ export class Transaction {
 
     // amount_money.currency
     if (this._amount_money?.currency == null) missingFields.push('currency');
-    else if (invalidNumber(this._amount_money?.currency))
+    else if (invalidString(this._amount_money?.currency))
       invalidFields.push('currency');
 
     // Optional fields
@@ -69,7 +101,7 @@ export class Transaction {
       invalidFields.push('target_account_id');
 
     return {
-      valid: Boolean(invalidFields.length || missingFields.length),
+      valid: !Boolean(invalidFields.length || missingFields.length),
       missingFields,
       invalidFields,
     };

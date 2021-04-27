@@ -6,7 +6,7 @@ export class Account {
   private _accounts = ACCOUNTS;
 
   _initialized = false;
-  _valid = false;
+  _isValid = false;
   _unique = false;
 
   private _id: string;
@@ -30,9 +30,42 @@ export class Account {
     this._note = acc?.note;
     this._balance = acc?.balance;
 
-    this._valid = this.valid().valid;
+    this._isValid = this.valid().valid;
     this._unique = this.isUnique(acc?.id);
     this._initialized = true;
+  }
+
+  get initialized(): boolean {
+    return this._initialized;
+  }
+  get isValid(): boolean {
+    return this._isValid;
+  }
+  get unique(): boolean {
+    return this._unique;
+  }
+  get id(): string | undefined {
+    return this._id;
+  }
+  get given_name(): string | undefined {
+    return this._given_name;
+  }
+  get family_name(): string | undefined {
+    return this._family_name;
+  }
+  get email_address(): string | undefined {
+    return this._email_address;
+  }
+  get note(): string | undefined {
+    return this._note;
+  }
+  get balance():
+    | undefined
+    | {
+        amount: number;
+        currency: string;
+      } {
+    return this._balance;
   }
 
   public valid(): {
@@ -91,11 +124,11 @@ export class Account {
         invalidFields.push('currency');
     }
 
-    if (missingFields.length || invalidFields.length) {
-      return { valid: false, invalidFields, missingFields };
-    }
-
-    return { valid: true };
+    return {
+      valid: !Boolean(invalidFields.length || missingFields.length),
+      invalidFields,
+      missingFields,
+    };
   }
 
   public isUnique(id: string) {
@@ -106,5 +139,16 @@ export class Account {
   public exists(id: string) {
     if (invalidString(id)) return false;
     return this._accounts.some((e) => e.id === id);
+  }
+
+  public toObject(): AccountDto {
+    return {
+      id: this._id,
+      given_name: this._given_name,
+      family_name: this._family_name,
+      email_address: this._email_address,
+      balance: this._balance,
+      note: this._note,
+    };
   }
 }

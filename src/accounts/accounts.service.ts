@@ -14,8 +14,8 @@ export class AccountsService {
   private accounts: AccountDto[] = ACCOUNTS;
   private transactions: TransactionsDto[] = TRANSACTIONS;
 
-  private MIN_TRANSACTION_AMOUNT = 1;
-  private MAX_TRANSACTION_AMOUNT = 1000;
+  readonly MIN_TRANSACTION_AMOUNT = 1;
+  readonly MAX_TRANSACTION_AMOUNT = 1000;
 
   public getAccount(id: string) {
     const acc = this.accounts.find((e) => e.id === id);
@@ -51,9 +51,9 @@ export class AccountsService {
       throw new HttpException('Missing account information', 400);
 
     // Make sure id is unique
-    if (!Acc._unique) throw new HttpException('Id already exists', 403);
+    if (!Acc.unique) throw new HttpException('Id already exists', 403);
 
-    this.accounts.push(acc);
+    this.accounts.push(Acc.toObject());
     return 'Done';
   }
 
@@ -95,7 +95,7 @@ export class AccountsService {
       throw new HttpException('Missing transaction information', 400);
 
     // Make sure id is unique
-    if (!trans._unique)
+    if (!trans.unique)
       throw new HttpException('A transaction with this id already exists', 403);
 
     // Make sure account exists
@@ -154,7 +154,7 @@ export class AccountsService {
       throw new HttpException('Missing transaction information', 400);
 
     // Make sure new transaction id is unique
-    if (!trans._unique)
+    if (!trans.unique)
       throw new HttpException('A transaction with this id already exists', 403);
 
     // Make sure account exists
@@ -209,7 +209,7 @@ export class AccountsService {
       throw new HttpException('Missing transaction information', 400);
 
     // Make sure transaction id is unique
-    if (!trans._unique)
+    if (!trans.unique)
       throw new HttpException('A transaction with this id already exists', 403);
 
     // Make sure transaction amount is in range
