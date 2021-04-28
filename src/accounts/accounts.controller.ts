@@ -7,6 +7,7 @@ import {
   CreateAccountValidationPipe,
   DepositValidationPipe,
   WithdrawValidationPipe,
+  SendValidationPipe,
 } from './accountValidationPipe';
 
 @Controller('accounts')
@@ -52,7 +53,7 @@ export class AccountsController {
   @Post(':id/transactions/send')
   public sendFunds(
     @Param('id', AccountValidationPipe) id: string,
-    @Body() trz: TransactionsDto,
+    @Body(SendValidationPipe) trz: TransactionsDto,
   ) {
     return this.accountService.send(id, trz);
   }

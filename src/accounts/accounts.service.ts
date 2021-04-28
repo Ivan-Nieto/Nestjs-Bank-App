@@ -110,9 +110,6 @@ export class AccountsService {
       throw new HttpException('Transaction amount out of bounds', 400);
 
     // Make sure target account is not source account
-    const targetAccount = this.accounts.find(
-      (e) => e.id === config.target_account_id,
-    );
     if (account_id === config.target_account_id)
       throw new HttpException('Target account cannot be source account', 400);
 
@@ -137,6 +134,7 @@ export class AccountsService {
     const targetAccountIndex = this.accounts.findIndex(
       (e) => e.id === config.target_account_id,
     );
+    const targetAccount = this.accounts[targetAccountIndex];
     this.accounts[targetAccountIndex] = {
       ...targetAccount,
       balance: {

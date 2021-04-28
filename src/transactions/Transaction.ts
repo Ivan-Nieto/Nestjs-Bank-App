@@ -131,6 +131,6 @@ export class Transaction {
   save(): { error: boolean } {
     if (!this.valid) return { error: true };
     this.transactions.push(this.toObject());
-    return { error: true };
+    return { error: false };
   }
 }
