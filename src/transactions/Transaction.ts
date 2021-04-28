@@ -65,7 +65,9 @@ export class Transaction {
     return this._target_account_id;
   }
 
-  valid(): {
+  valid(
+    ignoreAccountId?: boolean,
+  ): {
     valid: boolean;
     missingFields?: string[];
     invalidFields?: string[];
@@ -78,8 +80,10 @@ export class Transaction {
     else if (notObject(this._amount_money)) invalidFields.push('amount_money');
 
     // account_id
-    if (this._account_id == null) missingFields.push('account_id');
-    else if (invalidString(this._account_id)) invalidFields.push('account_id');
+    if (!ignoreAccountId && this._account_id == null)
+      missingFields.push('account_id');
+    else if (!ignoreAccountId && invalidString(this._account_id))
+      invalidFields.push('account_id');
 
     // amount_money.amount
     if (this._amount_money?.amount == null) missingFields.push('amount');

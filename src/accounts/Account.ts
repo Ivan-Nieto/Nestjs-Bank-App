@@ -155,6 +155,8 @@ export class Account {
   save(): { error: boolean } {
     if (!this.valid) return { error: true };
     this.accounts.push(this.toObject());
-    return { error: true };
+    return { error: false };
   }
 }
+
+export default Account;
